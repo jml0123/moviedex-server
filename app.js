@@ -1,4 +1,3 @@
-// USE THIS KEY FOR DEMO PURPOSES: 7c70d06c-a2dd-11ea-bb37-0242ac130002
 require('dotenv').config()
 const express = require('express');
 const morgan = require("morgan");
@@ -9,8 +8,19 @@ const MOVIE_DATA = require('./movies-data-small.json')
 const app = express();
 
 app.use(helmet());
-app.use(morgan('dev'))
+const morganSetting = process.env.NODE_ENV === "production" ? "tiny" : "common"
+app.use(morgan(morganSetting))
 app.use(cors())
+
+app.use((error, req, res, next) => {
+    let response
+    if (process.env.NODE_ENV === 'production') {
+      response = { error: { message: 'server error' }}
+    } else {
+      response = { error }
+    }
+    res.status(500).json(response)
+  })
 
 app.use(function validateToken(req, res, next) {
     const apiToken = process.env.API_TOKEN
