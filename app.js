@@ -27,7 +27,7 @@ app.use(function validateToken(req, res, next) {
     const authToken = req.get("Authorization")
 
     if (!authToken || authToken.split(' ')[1] !== apiToken) {
-        res.status(401).json({error: "Unauthorized Request. Invalid API Key"})
+        res.status(403).json({error: "Unauthorized Request. Invalid API Key"})
     }
     next();
 })

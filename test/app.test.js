@@ -4,16 +4,16 @@ const app = require('../app');
 const { expect } = require('chai');
 
 describe('GET/movies', () => {
-    it('should be 401 if invalid auth token is passed', () => {
+    it('should be 403 forbidden if invalid auth token is passed', () => {
         return supertest(app)
             .get("/movie")
             .set("Authorization", `Bearer bad token`)
-            .expect(401, {error: "Unauthorized Request. Invalid API Key"})
+            .expect(403, {error: "Unauthorized Request. Invalid API Key"})
     })
-    it('should be 401 if no auth token is passed', () => {
+    it('should be 403 forbidden if no auth token is passed', () => {
         return supertest(app)
             .get("/movie")
-            .expect(401, {error: "Unauthorized Request. Invalid API Key"})
+            .expect(403, {error: "Unauthorized Request. Invalid API Key"})
     })
 
     it('should return an array of movies', () => {
